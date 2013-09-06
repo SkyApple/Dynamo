@@ -292,233 +292,61 @@
                     <GradientStop Color="White" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
-            <Grid>
+
                 <Border Margin="11 0 0 0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
-                    <StackPanel x:Name="ShortcutBar" Orientation="Horizontal">
-                        <Button x:Name="NewScriptButton"
-                                ToolTip="New [Ctrl + N]"
-                                Command="{Binding NewHomeWorkspaceCommand}">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/new_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/new_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/new_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="OpenScriptButton"
-                                ToolTip="Open [Ctrl + O]"
-                                Command="{Binding ShowOpenDialogAndOpenResultCommand}">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/open_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/open_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/open_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="SaveButton"
-                                ToolTip="Save [Ctrl+S]"
-                                Command="{Binding ShowSaveDialogIfNeededAndSaveResultCommand}">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/save_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/save_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/save_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <!--<Button x:Name="UndoButton"
-                                ToolTip="Undo [Ctrl+Z]">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/undo_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/undo_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/undo_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="RedoButton"
-                                ToolTip="Redo [Ctrl+Y]">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/redo_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/redo_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/redo_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button x:Name="Run"
-                                ToolTip="Run">
-                            <Button.Resources>
-                                <Image x:Key="Normal"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/run_normal.png" />
-                                <Image x:Key="Disabled"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/run_disabled.png" />
-                                <Image x:Key="Hover"
-                                           Width="25"
-                                           Height="25"
-                                           Source="/DynamoCore;component/UI/Images/run_hover.png" />
-                            </Button.Resources>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter Property="Content" Value="{StaticResource Normal}" />
-                                        </MultiDataTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Content" Value="{StaticResource Disabled}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Content" Value="{StaticResource Hover}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>-->
-                    </StackPanel>
+                    <ItemsControl x:Name="ShortcutItemsControl"
+                                  ItemsSource="{Binding ElementName='_this', Path=ShortcutBarItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:Name="itemsTemplate">
+                                <Button ToolTip="{Binding ShortcutToolTip}"
+                                        Command="{Binding ShortcutCommand}">
+                                    <Button.Resources>
+                                        <Image x:Key="Normal"
+                                               Width="25"
+                                               Height="25"
+                                               Source="{Binding ImgNormalSource}" />
+                                        <Image x:Key="Disabled"
+                                               Width="25"
+                                               Height="25"
+                                               Source="{Binding ImgDisabledSource}" />
+                                        <Image x:Key="Hover"
+                                               Width="25"
+                                               Height="25"
+                                               Source="{Binding ImgHoverSource}" />
+                                    </Button.Resources>
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ShortCutButton}" TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsMouseOver}" Value="false" />
+                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled}" Value="true" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Content" Value="{StaticResource Normal}" />
+                                                </MultiDataTrigger>
+                                                <Trigger Property="IsEnabled" Value="false">
+                                                    <Setter Property="Content" Value="{StaticResource Disabled}" />
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="Content" Value="{StaticResource Hover}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel x:Name="ShortcutBar" Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    
                 </Border>
-            </Grid>
+
         </Border>
 
         <Border Margin="0" BorderBrush="Black" BorderThickness="0" Name="border" 
