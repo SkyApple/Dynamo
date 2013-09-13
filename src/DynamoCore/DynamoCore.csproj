@@ -94,6 +94,10 @@ limitations under the License.
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\extern\DesignScript\ProtoCore.dll</HintPath>
     </Reference>
+    <Reference Include="ProtoInterface">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\extern\DesignScript\ProtoInterface.dll</HintPath>
+    </Reference>
     <Reference Include="ProtoImperative">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\extern\DesignScript\ProtoImperative.dll</HintPath>
@@ -359,6 +363,10 @@ limitations under the License.
   <ItemGroup>
     <Page Include="UI\Prompts\CrashPrompt.xaml">
     </Page>
+    <Page Include="UI\Themes\MenuStyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Views\InstalledPackagesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -488,6 +496,9 @@ limitations under the License.
     <Resource Include="UI\Images\zoomout_disabled.png" />
     <Resource Include="UI\Images\zoomout_hover.png" />
     <Resource Include="UI\Images\zoomout_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Images\tick_selected.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
