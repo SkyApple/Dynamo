@@ -61,4 +61,5 @@
     <controls:PortNameToWidthConverter x:Key="PortNameToWidthConverter"/>
     <controls:TooltipLengthTruncater x:Key="TooltipLengthTruncater" />
     <controls:TabSizeConverter x:Key="TabSizeConverter" />
+    <controls:LimitWorkspaceTabsConverter x:Key="LimitWorkspaceTabsConverter" />
 </ResourceDictionary>

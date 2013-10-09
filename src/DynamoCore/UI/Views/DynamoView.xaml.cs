@@ -40,8 +40,8 @@ using Dynamo.UI.Commands;
 using System.Windows.Data;
 using Dynamo.UI.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Media;
+using Dynamo.Core;
 
 namespace Dynamo.Controls
 {
@@ -59,6 +59,10 @@ namespace Dynamo.Controls
 #pragma warning restore 649
         private DynamoViewModel _vm;
         private Stopwatch _timer;
+
+        private bool[] workspaceVisibility;
+        private int slidingWindowStart, slidingWindowEnd;
+        private int currentSlidingWindowSize;
 
         public bool ConsoleShowing
         {
@@ -82,6 +86,9 @@ namespace Dynamo.Controls
 
         public DynamoView()
         {
+            slidingWindowStart = slidingWindowEnd = -1;
+            currentSlidingWindowSize = 0;
+
             _timer = new Stopwatch();
             _timer.Start();
 
@@ -538,6 +545,7 @@ namespace Dynamo.Controls
                 workspace_vm.OnZoomChanged(this, new ZoomEventArgs(workspace_vm.Zoom));
 
                 //ResizeWorkspaceTabs();
+                ToggleWorkspaceTabVisibility(WorkspaceTabs.SelectedIndex);
             }
         }
 
@@ -639,6 +647,8 @@ namespace Dynamo.Controls
             Console.WriteLine("WSIndex: " + _vm.Workspaces.IndexOf(wsvm));
             //string tag = ((MenuItem)sender).Tag as string;
             //Console.WriteLine("Tag: " + tag);
+
+            ToggleWorkspaceTabVisibility(WorkspaceTabs.SelectedIndex);
         }
 
         private int GetWorkspaceIndex(string workspaceName)
@@ -670,6 +680,179 @@ namespace Dynamo.Controls
                 {
                     MultiBindingExpression myBinding = BindingOperations.GetMultiBindingExpression(tab, TabItem.WidthProperty);
                     myBinding.UpdateTarget();
+                }
+            }            
+        }
+
+        private void ToggleWorkspaceTabVisibility(int selectedIndex)
+        {
+            SlideWindow(selectedIndex);
+            for (int tab = 1; tab < WorkspaceTabs.Items.Count; tab++)
+            {
+                TabItem temp = (TabItem)WorkspaceTabs.ItemContainerGenerator.ContainerFromIndex(tab);
+                if (tab < slidingWindowStart || tab > slidingWindowEnd)
+                    temp.Visibility = Visibility.Collapsed;
+                else
+                    temp.Visibility = Visibility.Visible;
+            }
+
+            //// Reset visibility
+            //workspaceVisibility = new bool[WorkspaceTabs.Items.Count];
+            //workspaceVisibility[0] = true; // Home workspace always visible
+
+            //Collection<int> visibleWorkspaces = new Collection<int>();
+            //int i = selectedIndex;
+            //bool canIncrement = true; // Traversal direction
+
+            //if (WorkspaceTabs.Items.Count > Configurations.MaxAllowedTabs)
+            //{
+            //    int allowedTabs =  Configurations.MaxAllowedTabs;
+            //    if(selectedIndex != 0)
+            //    {
+            //        allowedTabs--;
+            //        visibleWorkspaces.Add(selectedIndex);
+            //    }
+
+            //    while (visibleWorkspaces.Count != allowedTabs)
+            //    {
+            //        if (!(i + 1 < _vm.Workspaces.Count))
+            //        {
+            //            canIncrement = false;
+            //            i = selectedIndex;
+            //        }
+
+            //        i += canIncrement ? 1 : -1;
+
+            //        visibleWorkspaces.Add(i);
+            //    }
+
+            //    for (int z = 0; z < visibleWorkspaces.Count; z++)
+            //    {
+            //        // To be bind to tab visibility option
+            //        workspaceVisibility[visibleWorkspaces[z]] = true;
+            //    }
+            //}
+            //else
+            //{
+            //    // No need to use visible workspace
+            //    visibleWorkspaces.Add(-1);
+            //}
+
+            //for (int y = 0; y < WorkspaceTabs.Items.Count; y++)
+            //{
+            //    TabItem temp = (TabItem)WorkspaceTabs.ItemContainerGenerator.ContainerFromIndex(y);
+            //    if (workspaceVisibility[y] == false && visibleWorkspaces[0] != -1)
+            //        temp.Visibility = Visibility.Collapsed;
+            //    else
+            //        temp.Visibility = Visibility.Visible;
+            //}
+        }
+
+        private int GetSlidingWindowSize()
+        {
+            int tabCount = WorkspaceTabs.Items.Count;
+
+            if (tabCount > Configurations.MinTabsBeforeClipping)
+            {
+                int fullWidthTabsVisible = (int)(WorkspaceTabs.ActualWidth / Configurations.TabDefaultWidth);
+
+                if (fullWidthTabsVisible < Configurations.MinTabsBeforeClipping)
+                    return Configurations.MinTabsBeforeClipping - 1;
+                else
+                    return fullWidthTabsVisible - 1;
+            }
+            else
+                return tabCount - 1;
+        }
+
+        private void ExpandSlidingWindow(int oldSlidingWindowSize)
+        {
+            int windowDiff = currentSlidingWindowSize - oldSlidingWindowSize;
+            int lastTab = WorkspaceTabs.Items.Count - 1;
+
+            // SHOULD NOT USE WHILE LOOP
+            while (windowDiff != 0)
+            {
+                if (slidingWindowEnd != lastTab)
+                    slidingWindowEnd++;
+                else
+                    slidingWindowStart--;
+
+                windowDiff--;
+            }
+        }
+
+        private void SlideWindow(int tabIndex)
+        {
+            int oldSlidingWindowSize = currentSlidingWindowSize;
+
+            currentSlidingWindowSize = GetSlidingWindowSize();
+            Console.WriteLine("Sliding window size: " + currentSlidingWindowSize);
+
+            if (tabIndex != 0)
+            {
+                if (tabIndex < slidingWindowStart)
+                {
+                    slidingWindowStart = tabIndex;
+                    slidingWindowEnd = slidingWindowStart + (currentSlidingWindowSize - 1);
+                }
+                else if (tabIndex > slidingWindowEnd)
+                {
+                    slidingWindowEnd = tabIndex;
+                    slidingWindowStart = slidingWindowEnd - (currentSlidingWindowSize - 1);
+                }
+                else
+                {
+                    // Handles sliding window size change caused by window resizing and tab close
+                    if (oldSlidingWindowSize != currentSlidingWindowSize)
+                    {
+                        if (oldSlidingWindowSize > currentSlidingWindowSize)
+                        {
+                            if (tabIndex == slidingWindowStart)
+                                slidingWindowEnd--;
+                            else if (tabIndex == slidingWindowEnd)
+                                slidingWindowStart++;
+                            else
+                            {
+                                int windowDiff = oldSlidingWindowSize - currentSlidingWindowSize;
+
+                                while (windowDiff != 0)
+                                {
+                                    if (slidingWindowEnd != tabIndex)
+                                        slidingWindowEnd--;
+                                    else
+                                        slidingWindowStart++;
+
+                                    windowDiff--;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ExpandSlidingWindow(oldSlidingWindowSize);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Handles sliding window size change caused by window resizing and tab close
+                if (oldSlidingWindowSize != currentSlidingWindowSize)
+                {
+                    if (oldSlidingWindowSize > currentSlidingWindowSize)
+                    {
+                        int windowDiff = oldSlidingWindowSize - currentSlidingWindowSize;
+
+                        while (windowDiff != 0)
+                        {
+                            slidingWindowEnd--;
+                            windowDiff--;
+                        }
+                    }
+                    else
+                    {
+                        ExpandSlidingWindow(oldSlidingWindowSize);
+                    }
                 }
             }
         }
@@ -778,5 +961,15 @@ namespace Dynamo.Controls
         {
             _vm.IsMouseDown = false;
 		}
-    }
+
+        private void WorkspaceTabs_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            ToggleWorkspaceTabVisibility(WorkspaceTabs.SelectedIndex);
+        }
+
+        private void WorkspaceTabs_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ToggleWorkspaceTabVisibility(WorkspaceTabs.SelectedIndex);
+        }
+    }    
 }
