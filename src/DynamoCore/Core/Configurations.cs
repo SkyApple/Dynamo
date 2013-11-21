@@ -83,6 +83,11 @@ namespace Dynamo.Core
         public static double ErrorContentMaxWidth = ErrorMaxWidth - 10;
         public static double ErrorContentMaxHeight = ErrorMaxHeight - 16;
 
+        public static double ErrorCondensedMaxWidth = 300;
+        public static double ErrorCondensedMaxHeight = 200;
+        public static double ErrorCondensedContentMaxWidth = ErrorCondensedMaxWidth - 10;
+        public static double ErrorCondensedContentMaxHeight = ErrorCondensedMaxHeight - 16;
+
         public static double ErrorTextFontSize = 13;
         public static FontWeight ErrorTextFontWeight = FontWeights.Light;
         public static SolidColorBrush ErrorTextForeground = new SolidColorBrush(Color.FromRgb(190, 70, 70));
