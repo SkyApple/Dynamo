@@ -62,6 +62,7 @@ namespace Dynamo.UI
         private static ResourceDictionary _toolbarStyleDictionary;
         private static ResourceDictionary _connectorsDictionary;
         private static ResourceDictionary _portsDictionary;
+        private static ResourceDictionary _infoBubbleConvertersDictionary;
 
         public static ResourceDictionary DynamoModernDictionary
         {
@@ -222,6 +223,24 @@ namespace Dynamo.UI
                 }
 
                 return _portsDictionary;
+            }
+        }
+
+        public static ResourceDictionary InfoBubbleConvertersDictionary
+        {
+            get
+            {
+                if (_infoBubbleConvertersDictionary == null)
+                {
+                    System.Uri resourceLocater =
+                        new System.Uri("/DynamoCore;component/UI/Themes/InfoBubbleConverters.xaml",
+                                        System.UriKind.Relative);
+
+                    _infoBubbleConvertersDictionary =
+                        (ResourceDictionary)Application.LoadComponent(resourceLocater);
+                }
+
+                return _infoBubbleConvertersDictionary;
             }
         }
     }

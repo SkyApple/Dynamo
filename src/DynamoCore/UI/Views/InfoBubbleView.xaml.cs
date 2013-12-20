@@ -136,7 +136,7 @@ namespace Dynamo.Controls
             preview_LastMaxWidth = double.MaxValue;
             preview_LastMaxHeight = double.MaxValue;
 
-            this.DataContextChanged += InfoBubbleView_DataContextChanged;
+            this.DataContextChanged += InfoBubbleView_DataContextChanged;            
         }
 
         private void InfoBubbleWindowUserControl_Loaded(object sender, RoutedEventArgs e)
@@ -219,6 +219,36 @@ namespace Dynamo.Controls
         {
             ViewModel = e.NewValue as InfoBubbleViewModel;
             UpdateContent();
+
+            Binding contentContainerTagBinding = new Binding("MyDataProperty");
+            contentContainerTagBinding.Source = ViewModel;
+            contentContainerTagBinding.Path = new PropertyPath("Content");
+            //myBinding.Converter = new ContentToUIElementConverter();
+            contentContainerTagBinding.NotifyOnTargetUpdated = true;
+            ContentContainer.SetBinding(ContentPresenter.TagProperty, contentContainerTagBinding);
+            ContentContainer.TargetUpdated += ContentContainer_TargetUpdated;
+
+
+            //Binding myBinding = new Binding("MyDataProperty");
+            //myBinding.Source = ViewModel;
+            //myBinding.Path = new PropertyPath("Content");
+            ////myBinding.Converter = new ContentToUIElementConverter();
+            //myBinding.NotifyOnTargetUpdated = true;
+            //myBinding.Mode = BindingMode.OneWayToSource;
+            //ContentContainer.SetBinding(ContentPresenter.ActualHeightProperty, myBinding);
+            //ContentContainer.TargetUpdated += ContentContainer_TargetUpdated;
+        }
+
+        private void ContentContainer_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            switch (e.Property.ToString())
+            {
+                case "Tag":
+                    UpdateContent();
+                    UpdateShape();
+                    UpdatePosition();
+                    break;
+            }
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -242,10 +272,10 @@ namespace Dynamo.Controls
                 switch (e.PropertyName)
                 {
                     case "Content":
-                        UpdateStyle();
-                        UpdateContent();
-                        UpdateShape();
-                        UpdatePosition();
+                        //UpdateStyle();
+                        //UpdateContent();
+                        //UpdateShape();
+                        //UpdatePosition();
                         break;
 
                     case "TargetTopLeft":
@@ -331,9 +361,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_LibraryItemPreview()
         {
-            backgroundPolygon.Fill = Configurations.LibraryTooltipFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.LibraryTooltipFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.LibraryTooltipFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.LibraryTooltipFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.LibraryTooltipFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.LibraryTooltipFrameStrokeColor;
 
             ContentContainer.MaxWidth = Configurations.LibraryTooltipMaxWidth;
             ContentContainer.MaxHeight = Configurations.LibraryTooltipMaxHeight;
@@ -349,9 +379,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_NodeTooltip(InfoBubbleViewModel.Direction connectingDirection)
         {
-            backgroundPolygon.Fill = Configurations.NodeTooltipFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.NodeTooltipFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.NodeTooltipFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.NodeTooltipFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.NodeTooltipFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.NodeTooltipFrameStrokeColor;
 
             ContentContainer.MaxWidth = Configurations.NodeTooltipMaxWidth;
             ContentContainer.MaxHeight = Configurations.NodeTooltipMaxHeight;
@@ -379,9 +409,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_Error()
         {
-            backgroundPolygon.Fill = Configurations.ErrorFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.ErrorFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.ErrorFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.ErrorFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.ErrorFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.ErrorFrameStrokeColor;
 
             ContentContainer.MaxWidth = Configurations.ErrorMaxWidth;
             ContentContainer.MaxHeight = Configurations.ErrorMaxHeight;
@@ -397,9 +427,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_ErrorCondensed()
         {
-            backgroundPolygon.Fill = Configurations.ErrorFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.ErrorFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.ErrorFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.ErrorFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.ErrorFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.ErrorFrameStrokeColor;
 
             ContentContainer.MaxWidth = Configurations.ErrorCondensedMaxWidth;
             ContentContainer.MinWidth = Configurations.ErrorCondensedMinWidth;
@@ -417,9 +447,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_Preview()
         {
-            backgroundPolygon.Fill = Configurations.PreviewFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.PreviewFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.PreviewFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.PreviewFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.PreviewFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.PreviewFrameStrokeColor;
 
             ContentFontSize = Configurations.PreviewTextFontSize;
             ContentForeground = Configurations.PreviewTextForeground;
@@ -455,9 +485,9 @@ namespace Dynamo.Controls
 
         private void SetStyle_PreviewCondensed()
         {
-            backgroundPolygon.Fill = Configurations.PreviewFrameFill;
-            backgroundPolygon.StrokeThickness = Configurations.PreviewFrameStrokeThickness;
-            backgroundPolygon.Stroke = Configurations.PreviewFrameStrokeColor;
+            //backgroundPolygon.Fill = Configurations.PreviewFrameFill;
+            //backgroundPolygon.StrokeThickness = Configurations.PreviewFrameStrokeThickness;
+            //backgroundPolygon.Stroke = Configurations.PreviewFrameStrokeColor;
 
             ContentContainer.MaxWidth = Configurations.PreviewCondensedMaxWidth;
             ContentContainer.MinWidth = Configurations.PreviewCondensedMinWidth;
@@ -485,7 +515,7 @@ namespace Dynamo.Controls
             //  The only solution that I can come up for now is clean the StackPanel content and 
             //  then add a new TextBox to it
 
-            ContentContainer.Children.Clear();
+            ContentContainer.Content = "";
 
             if (ViewModel == null) return;
 
@@ -539,13 +569,13 @@ namespace Dynamo.Controls
                 Grid.SetRow(r3, 2);
                 myGrid.UseLayoutRounding = true;
 
-                ContentContainer.Children.Add(myGrid);
+                ContentContainer.Content = myGrid;
                 #endregion
             }
             else
             {
                 TextBox textBox = GetNewTextBox(ViewModel.Content);
-                ContentContainer.Children.Add(textBox);
+                ContentContainer.Content = textBox;
             }
         }
 

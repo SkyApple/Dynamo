@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Dynamo.Controls">
+    <controls:InfoBubbleStyleToVisibilityConverter x:Key="StyleToVisibilityConverter" />
+    <controls:InfoBubbleConnectingDirectionToPointCollectionConverter x:Key="ConnectingDirectionToPointCollectionConverter" />
+    <controls:InfoBubbleStyleToFillConverter x:Key="InfoBubbleStyleToFillConverter" />
+    <controls:InfoBubbleStyleToStrokeColorConverter x:Key="InfoBubbleStyleToStrokeColorConverter" />
+    <controls:InfoBubbleStyleToStrokeThicknessConverter x:Key="InfoBubbleStyleToStrokeThicknessConverter" />
+</ResourceDictionary>

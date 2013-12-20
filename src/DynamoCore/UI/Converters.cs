@@ -1249,6 +1249,214 @@ namespace Dynamo.Controls
         }
     }
 
+    public class InfoBubbleStyleToFillConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            SolidColorBrush fillBrush = null;
+
+            switch ((InfoBubbleViewModel.Style)value)
+            {
+                case InfoBubbleViewModel.Style.Error:
+                case InfoBubbleViewModel.Style.ErrorCondensed:
+                    fillBrush = Configurations.ErrorFrameFill;
+                    break;
+
+                case InfoBubbleViewModel.Style.LibraryItemPreview:
+                    fillBrush = Configurations.LibraryTooltipFrameFill;
+                    break;
+
+                case InfoBubbleViewModel.Style.NodeTooltip:
+                    fillBrush = Configurations.NodeTooltipFrameFill;
+                    break;
+
+                case InfoBubbleViewModel.Style.Preview:
+                case InfoBubbleViewModel.Style.PreviewCondensed:
+                    fillBrush = Configurations.PreviewFrameFill;
+                    break;
+
+                case InfoBubbleViewModel.Style.None:
+                    break;
+            }
+
+            return fillBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class InfoBubbleStyleToStrokeColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            SolidColorBrush strokeColorBrush = null;
+
+            switch ((InfoBubbleViewModel.Style)value)
+            {
+                case InfoBubbleViewModel.Style.Error:
+                case InfoBubbleViewModel.Style.ErrorCondensed:
+                    strokeColorBrush = Configurations.ErrorFrameStrokeColor;
+                    break;
+
+                case InfoBubbleViewModel.Style.LibraryItemPreview:
+                    strokeColorBrush = Configurations.LibraryTooltipFrameStrokeColor;
+                    break;
+
+                case InfoBubbleViewModel.Style.NodeTooltip:
+                    strokeColorBrush = Configurations.NodeTooltipFrameStrokeColor;
+                    break;
+
+                case InfoBubbleViewModel.Style.Preview:
+                case InfoBubbleViewModel.Style.PreviewCondensed:
+                    strokeColorBrush = Configurations.PreviewFrameStrokeColor;
+                    break;
+
+                case InfoBubbleViewModel.Style.None:
+                    break;
+            }
+
+            return strokeColorBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class InfoBubbleStyleToStrokeThicknessConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double strokeThickness = 0;
+
+            switch ((InfoBubbleViewModel.Style)value)
+            {
+                case InfoBubbleViewModel.Style.Error:
+                case InfoBubbleViewModel.Style.ErrorCondensed:
+                    strokeThickness = Configurations.ErrorFrameStrokeThickness;
+                    break;
+
+                case InfoBubbleViewModel.Style.LibraryItemPreview:
+                    strokeThickness = Configurations.LibraryTooltipFrameStrokeThickness;
+                    break;
+
+                case InfoBubbleViewModel.Style.NodeTooltip:
+                    strokeThickness = Configurations.NodeTooltipFrameStrokeThickness;
+                    break;
+
+                case InfoBubbleViewModel.Style.Preview:
+                case InfoBubbleViewModel.Style.PreviewCondensed:
+                    strokeThickness = Configurations.PreviewFrameStrokeThickness;
+                    break;
+
+                case InfoBubbleViewModel.Style.None:
+                    break;
+            }
+
+            return strokeThickness;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class InfoBubbleConnectingDirectionToPointCollectionConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class ContentToUIElementConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString().Equals("..."))
+            {
+                #region Draw Icon
+                System.Windows.Shapes.Rectangle r1 = new System.Windows.Shapes.Rectangle();
+                r1.Fill = Brushes.Black;
+                r1.Height = 1;
+                r1.Width = 16;
+                r1.UseLayoutRounding = true;
+
+                System.Windows.Shapes.Rectangle r2 = new System.Windows.Shapes.Rectangle();
+                r2.Fill = Brushes.Black;
+                r2.Height = 1;
+                r2.Width = 16;
+                r2.UseLayoutRounding = true;
+
+                System.Windows.Shapes.Rectangle r3 = new System.Windows.Shapes.Rectangle();
+                r3.Fill = Brushes.Black;
+                r3.Height = 1;
+                r3.Width = 10;
+                r3.UseLayoutRounding = true;
+                r3.HorizontalAlignment = HorizontalAlignment.Left;
+
+                Grid myGrid = new Grid();
+                myGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+                myGrid.VerticalAlignment = VerticalAlignment.Stretch;
+                myGrid.Background = Brushes.Transparent;
+
+                // Create row definitions.
+                RowDefinition rowDefinition1 = new RowDefinition();
+                RowDefinition rowDefinition2 = new RowDefinition();
+                RowDefinition rowDefinition3 = new RowDefinition();
+                rowDefinition1.Height = new GridLength(3);
+                rowDefinition2.Height = new GridLength(3);
+                rowDefinition3.Height = new GridLength(3);
+
+                myGrid.RowDefinitions.Add(rowDefinition1);
+                myGrid.RowDefinitions.Add(rowDefinition2);
+                myGrid.RowDefinitions.Add(rowDefinition3);
+                myGrid.Children.Add(r1);
+                Grid.SetRow(r1, 0);
+                myGrid.Children.Add(r2);
+                Grid.SetRow(r2, 1);
+                myGrid.Children.Add(r3);
+                Grid.SetRow(r3, 2);
+                myGrid.UseLayoutRounding = true;
+
+                return myGrid;
+                #endregion
+            }
+            else
+            {
+                TextBox textBox = new TextBox();
+                textBox.Text = value.ToString();
+                textBox.TextWrapping = TextWrapping.Wrap;
+
+                textBox.Background = Brushes.Transparent;
+                textBox.IsReadOnly = true;
+                textBox.BorderThickness = new Thickness(0);
+
+                textBox.HorizontalAlignment = HorizontalAlignment.Center;
+                textBox.VerticalAlignment = VerticalAlignment.Center;
+
+                textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                
+                return textBox;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
     public class BoolToScrollBarVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

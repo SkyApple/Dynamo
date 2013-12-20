@@ -4,24 +4,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:Dynamo.Controls"
+             xmlns:ui="clr-namespace:Dynamo.UI"
              mc:Ignorable="d"
              Name="InfoBubbleWindowUserControl"
              Loaded="InfoBubbleWindowUserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
-            <controls:InfoBubbleStyleToVisibilityConverter x:Key="StyleToVisibilityConverter"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:SharedResourceDictionary Source="/DynamoCore;component/UI/Themes/InfoBubbleConverters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid x:Name="mainGrid" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Top"
-           MouseLeave="InfoBubble_MouseLeave" MouseMove="MainGrid_MouseMove" MouseWheel="InfoBubble_MouseWheel">
+           MouseLeave="InfoBubble_MouseLeave" MouseMove="MainGrid_MouseMove" MouseWheel="InfoBubble_MouseWheel"
+          Margin="{Binding NEEDWORKHEREo}">
 
         <Polygon Name="backgroundPolygon" Margin="0, 0, 0, 0" 
                  MouseMove="InfoBubble_MouseMove" MouseEnter="InfoBubble_MouseEnter" MouseDown="InfoBubble_PreviewMouseDown"
-                 RenderOptions.EdgeMode="Aliased">
+                 RenderOptions.EdgeMode="Aliased" 
+                 Fill="{Binding Path=InfoBubbleStyle, Converter={StaticResource InfoBubbleStyleToFillConverter}}"
+                 Stroke="{Binding Path=InfoBubbleStyle, Converter={StaticResource InfoBubbleStyleToStrokeColorConverter}}"
+                 StrokeThickness="{Binding Path=InfoBubbleStyle, Converter={StaticResource InfoBubbleStyleToStrokeThicknessConverter}}">
+            <!--<Polygon.Points>
+                <MultiBinding Converter="{StaticResource ConnectingDirectionToPointCollectionConverter}">
+                    <Binding ElementName="ContentContainer" Path="ActualHeight"/>
+                    <Binding ElementName="ContentContainer" Path="ActualWidth"/>
+                    <Binding Path="ConnectingDirection"/>
+                    <Binding Path="Content" />
+                </MultiBinding>
+            </Polygon.Points>-->
         </Polygon>
 
-        <StackPanel Name="ContentContainer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+        <!--<StackPanel Name="ContentContainer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     MouseEnter="ContentContainer_MouseEnter">
             <StackPanel.Resources>
                 <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
@@ -68,7 +83,91 @@
                     </Setter>
                 </Style>
             </StackPanel.Resources>
-        </StackPanel>
+        </StackPanel>-->
+        <ContentPresenter Name="ContentContainer"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          MouseEnter="ContentContainer_MouseEnter">
+            <ContentPresenter.Resources>
+                <Style x:Key="{x:Type ScrollBar}"
+                       TargetType="{x:Type ScrollBar}">
+                    <Setter Property="Stylus.IsFlicksEnabled"
+                            Value="false" />
+                    <Setter Property="Foreground"
+                            Value="Gray" />
+                    <Setter Property="Background"
+                            Value="WhiteSmoke" />
+                    <Setter Property="Width"
+                            Value="5" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                <Grid x:Name="GridRoot"
+                                      Width="5"
+                                      Background="{TemplateBinding Background}">
+                                    <Track x:Name="PART_Track"
+                                           Grid.Row="0"
+                                           IsDirectionReversed="true"
+                                           Focusable="false">
+                                        <Track.Thumb>
+                                            <Thumb x:Name="Thumb"
+                                                   Background="{TemplateBinding Foreground}"
+                                                   Style="{DynamicResource ScrollThumbs}" />
+                                        </Track.Thumb>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton x:Name="PageUp"
+                                                          Command="ScrollBar.PageDownCommand"
+                                                          Opacity="0"
+                                                          Focusable="false" />
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton x:Name="PageDown"
+                                                          Command="ScrollBar.PageUpCommand"
+                                                          Opacity="0"
+                                                          Focusable="false" />
+                                        </Track.DecreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="ScrollThumbs"
+                       TargetType="{x:Type Thumb}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                <Grid x:Name="Grid">
+                                    <Rectangle HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch"
+                                               Width="Auto"
+                                               Height="Auto"
+                                               Fill="Transparent" />
+                                    <Border x:Name="Rectangle1"
+                                            CornerRadius="5"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Width="Auto"
+                                            Height="Auto"
+                                            Background="{TemplateBinding Background}" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="Tag"
+                                             Value="Horizontal">
+                                        <Setter TargetName="Rectangle1"
+                                                Property="Width"
+                                                Value="Auto" />
+                                        <Setter TargetName="Rectangle1"
+                                                Property="Height"
+                                                Value="7" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ContentPresenter.Resources>
+        </ContentPresenter>
 
         <Rectangle Name="VerticalResizeBar" Width="15" HorizontalAlignment="Right" Fill="Transparent" StrokeThickness="0"
                    Margin="0 0 -10 0" Visibility="{Binding Path=InfoBubbleStyle, Converter={StaticResource StyleToVisibilityConverter}}"
